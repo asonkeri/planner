@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { DateTime } from "luxon";
 import { useContext } from "react";
-import { DataContext } from "../App";
-import { moveItem } from "../data";
-import { useDragCellItem } from "../DragAndDrop/hooks";
+import { DataContext } from "../../App";
+import { moveItem } from "../../data";
+import { useDragCellItem } from "../../hooks/dragAndDrop";
 
 const CellItemStyle = styled.div`
   width: 10px;

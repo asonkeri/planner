@@ -1,5 +1,23 @@
-import { AppData } from "../App";
-import { CellData } from "../CellItem/CellItem";
+import { DateTime } from "luxon";
+import { CellData } from "../components/CellItem/CellItem";
+import { AppData } from "../types";
+
+export const initialData: AppData = [
+  {
+    id: "foo",
+    items: [
+      { id: "foo1", date: DateTime.now().plus({ day: 2 }).startOf("day") },
+    ],
+  },
+  {
+    id: "bar",
+    items: [],
+  },
+  {
+    id: "baz",
+    items: [],
+  },
+];
 
 export const moveItem = (
   data: AppData,

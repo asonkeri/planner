@@ -4,7 +4,7 @@ import {
   useDrag,
   useDrop,
 } from "react-dnd";
-import { CellData } from "../CellItem/CellItem";
+import { CellData } from "../components/CellItem/CellItem";
 
 type CellItemDragSourceMonitor = DragSourceMonitor<CellData, CellData>;
 type CellItemDropTargetMonitor = DropTargetMonitor<CellData, CellData>;
