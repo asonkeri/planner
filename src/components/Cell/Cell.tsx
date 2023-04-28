@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import { DateTime } from "luxon";
 import { useContext } from "react";
 import { DataContext } from "../../App";
-import { addItemToCell } from "../../data";
+import { addItemToCell, createItem } from "../../data";
 import { useDropCellItem } from "../../hooks/dragAndDrop";
+import { CellCoordinates } from "../../types";
 import CellItem from "../CellItem/CellItem";
 
 export const CommonCellStyle = styled.div`
@@ -27,13 +27,14 @@ const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
     "2px 0 0 0 #f00, 0 2px 0 0 #f00, 2px 2px 0 0 #f00,2px 0 0 0 #f00 inset, 0 2px 0 0 #f00 inset;"};
 `;
 
-type Props = { rowId: string; date: DateTime };
+type Props = CellCoordinates;
 export const Cell = (cell: Props) => {
   const { data, setData } = useContext(DataContext);
   const { isOver, drop } = useDropCellItem(cell);
 
   const handleClick = () => {
-    const newData = addItemToCell(data, cell);
+    const item = createItem(cell.rowId, cell.date);
+    const newData = addItemToCell(data, item, cell);
     setData(newData);
   };
 

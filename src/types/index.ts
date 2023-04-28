@@ -1,5 +1,10 @@
 import { DateTime } from "luxon";
 
+export type CellCoordinates = {
+  rowId: string;
+  date: DateTime;
+};
+
 export type Item = {
   id: string;
   rowId: string;

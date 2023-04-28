@@ -4,12 +4,12 @@ import {
   useDrag,
   useDrop,
 } from "react-dnd";
-import { CellData } from "../components/CellItem/CellItem";
+import { CellCoordinates, Item } from "../types";
 
-type CellItemDragSourceMonitor = DragSourceMonitor<CellData, CellData>;
-type CellItemDropTargetMonitor = DropTargetMonitor<CellData, CellData>;
+type CellItemDragSourceMonitor = DragSourceMonitor<Item, Item>;
+type CellItemDropTargetMonitor = DropTargetMonitor<Item, CellCoordinates>;
 
-export const useDropCellItem = (cell: CellData) => {
+export const useDropCellItem = (cell: CellCoordinates) => {
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: "CELLITEM",
@@ -24,15 +24,15 @@ export const useDropCellItem = (cell: CellData) => {
 };
 
 export const useDragCellItem = (
-  cell: CellData,
-  handleDrop: (dropResult: CellData) => void
+  item: Item,
+  handleDrop: (dropResult: Item) => void
 ) => {
   const [, dragRef] = useDrag(
     () => ({
       type: "CELLITEM",
-      item: cell,
+      item: item,
       end: (_item, monitor: CellItemDragSourceMonitor) => {
-        const dropResult = monitor.getDropResult<CellData>();
+        const dropResult = monitor.getDropResult<Item>();
         if (dropResult) {
           handleDrop(dropResult);
         }
