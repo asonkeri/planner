@@ -4,7 +4,6 @@ import { Cell } from "../Cell/Cell";
 
 const RowStyle = styled.div`
   display: flex;
-  background-color: white;
 `;
 
 const RowHeader = styled.div`
@@ -27,10 +26,9 @@ const Row = ({ interval, id }: Props) => {
       <RowHeader>Row ({id})</RowHeader>
       {days.map((day) => {
         const { start } = day;
-        if (!start) {
-          return null;
-        }
-        return <Cell key={start.toISODate()} rowId={id} date={start} />;
+        return (
+          start && <Cell key={start.toISODate()} rowId={id} date={start} />
+        );
       })}
     </RowStyle>
   );
