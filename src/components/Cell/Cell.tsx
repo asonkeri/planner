@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
+import { DateTime } from "luxon";
 import { useContext } from "react";
 import { DataContext } from "../../App";
 import { addItemToCell } from "../../data";
 import { useDropCellItem } from "../../hooks/dragAndDrop";
-import CellItem, { CellData } from "../CellItem/CellItem";
+import CellItem from "../CellItem/CellItem";
 
 export const CommonCellStyle = styled.div`
   width: 100px;
@@ -26,7 +27,7 @@ const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
     "2px 0 0 0 #f00, 0 2px 0 0 #f00, 2px 2px 0 0 #f00,2px 0 0 0 #f00 inset, 0 2px 0 0 #f00 inset;"};
 `;
 
-type Props = CellData;
+type Props = { rowId: string; date: DateTime };
 export const Cell = (cell: Props) => {
   const { data, setData } = useContext(DataContext);
   const { isOver, drop } = useDropCellItem(cell);
@@ -36,14 +37,16 @@ export const Cell = (cell: Props) => {
     setData(newData);
   };
 
-  const rowItems = data.find((item) => item.id === cell.rowId);
-  const active = rowItems?.items.some((item) =>
-    item.date.hasSame(cell.date, "day")
-  );
+  const rowData = data.find((item) => item.id === cell.rowId);
+  const cellItems = rowData
+    ? rowData.items.filter((item) => item.date.hasSame(cell.date, "day"))
+    : [];
 
   return (
     <CellStyle ref={drop} isOver={isOver} onClick={handleClick}>
-      {active && <CellItem {...cell} />}
+      {cellItems.map((item) => (
+        <CellItem key={item.id} {...item} />
+      ))}
     </CellStyle>
   );
 };

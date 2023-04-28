@@ -8,6 +8,7 @@ import { useDragCellItem } from "../../hooks/dragAndDrop";
 const CellItemStyle = styled.div`
   width: 10px;
   height: 10px;
+  margin: 2px;
   background-color: red;
 `;
 

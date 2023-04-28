@@ -6,7 +6,11 @@ export const initialData: AppData = [
   {
     id: "foo",
     items: [
-      { id: "foo1", date: DateTime.now().plus({ day: 2 }).startOf("day") },
+      {
+        id: "foo1",
+        rowId: "foo",
+        date: DateTime.now().plus({ day: 2 }).startOf("day"),
+      },
     ],
   },
   {
@@ -35,7 +39,7 @@ export const addItemToCell = (data: AppData, { rowId, date }: CellData) => {
       const id = String(Math.round(Math.random() * 10000));
       return {
         ...row,
-        items: [...row.items, { id, date }],
+        items: [...row.items, { id, date, rowId }],
       };
     }
     return row;

@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 
 export type Item = {
   id: string;
+  rowId: string;
   date: DateTime;
 };
 
