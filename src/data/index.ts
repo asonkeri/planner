@@ -6,12 +6,15 @@ export const createItem = (rowId: string, date: DateTime): Item => {
   return { id, rowId, date };
 };
 
-
 export const moveItem = (
   data: AppData,
   item: Item,
   targetCell: CellCoordinates
 ) => {
+  // If the item is already in the target cell, do nothing
+  if (item.date.equals(targetCell.date) && item.rowId === targetCell.rowId) {
+    return data;
+  }
   const newItem = { ...item, date: targetCell.date, rowId: targetCell.rowId };
   let newData = addItemToCell(data, newItem, targetCell);
   newData = removeItem(newData, item);
@@ -37,7 +40,7 @@ export const removeItem = (data: AppData, item: Item) => {
     !(
       rowItem.id === item.id &&
       rowItem.rowId === item.rowId &&
-      rowItem.date === item.date
+      rowItem.date.equals(item.date)
     );
 
   const newData: AppData = data.map((row) => {
