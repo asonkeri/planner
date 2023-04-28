@@ -7,8 +7,8 @@ import { Item } from "../../types";
 
 const CellItemStyle = styled.div`
   width: 100%;
-  margin: 2px;
-  background-color: red;
+  margin: 0.25rem;
+  background-color: lightblue;
   border-radius: 0.25rem;
   cursor: pointer;
 `;
@@ -23,7 +23,7 @@ const CellItem = (item: Props) => {
   const { data, setData } = useContext(DataContext);
   const { dragRef } = useDragCellItem(item, handleDrop);
 
-  return <CellItemStyle ref={dragRef} >{item.id}</CellItemStyle>;
+  return <CellItemStyle ref={dragRef}>{item.id}</CellItemStyle>;
 };
 
 export default CellItem;

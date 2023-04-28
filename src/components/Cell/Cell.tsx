@@ -8,7 +8,7 @@ import CellItem from "../CellItem/CellItem";
 
 export const CommonCellStyle = styled.div`
   width: 100px;
-  min-height: 40px;
+  min-height: 60px;
   padding: 0.25rem;
   text-align: center;
   box-shadow: 2px 0 0 0 #888, 0 2px 0 0 #888, 2px 2px 0 0 #888,
@@ -16,15 +16,18 @@ export const CommonCellStyle = styled.div`
 `;
 
 type CellStyleProps = { isOver?: boolean };
+const borderHilightColor = "lightblue";
 const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
+  padding-bottom: 1rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  align-content: flex-start;
   z-index: ${({ isOver }) => (isOver ? 1 : "auto")};
   box-shadow: ${({ isOver }) =>
     isOver &&
-    "2px 0 0 0 #f00, 0 2px 0 0 #f00, 2px 2px 0 0 #f00,2px 0 0 0 #f00 inset, 0 2px 0 0 #f00 inset;"};
+    `4px 0 0 0 ${borderHilightColor}, 0 4px 0 0 ${borderHilightColor}, 4px 4px 0 0 ${borderHilightColor},4px 0 0 0 ${borderHilightColor} inset, 0 4px 0 0 ${borderHilightColor} inset;`};
 `;
 
 type Props = CellCoordinates;
