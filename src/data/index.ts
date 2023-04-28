@@ -1,31 +1,11 @@
 import { DateTime } from "luxon";
 import { AppData, CellCoordinates, Item } from "../types";
 
-export const initialData: AppData = [
-  {
-    id: "foo",
-    items: [
-      {
-        id: "foo1",
-        rowId: "foo",
-        date: DateTime.now().plus({ day: 2 }).startOf("day"),
-      },
-    ],
-  },
-  {
-    id: "bar",
-    items: [],
-  },
-  {
-    id: "baz",
-    items: [],
-  },
-];
-
 export const createItem = (rowId: string, date: DateTime): Item => {
   const id = String(Math.round(Math.random() * 1000000));
   return { id, rowId, date };
 };
+
 
 export const moveItem = (
   data: AppData,

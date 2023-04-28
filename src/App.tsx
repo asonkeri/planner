@@ -6,7 +6,7 @@ import "./App.css";
 import HeaderRow from "./components/HeaderRow/HeaderRow";
 import Row from "./components/Row/Row";
 import RowContainer from "./components/RowContainer/RowContainer";
-import { initialData } from "./data";
+import { createItem } from "./data";
 import { AppData } from "./types";
 
 type DataContextType = { data: AppData; setData: (data: AppData) => void };
@@ -17,6 +17,12 @@ const initialContext = {
   },
 };
 export const DataContext = createContext<DataContextType>(initialContext);
+
+const initialData: AppData = [
+  { id: "foo", items: [createItem("foo", DateTime.now().startOf("day"))] },
+  { id: "bar", items: [] },
+  { id: "baz", items: [] },
+];
 
 function App() {
   const [startDate, setStartDate] = useState(DateTime.now().startOf("day"));
