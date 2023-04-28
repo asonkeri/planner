@@ -1,41 +1,39 @@
-import { DateTime } from "luxon";
+import { AppData } from "../App";
 import { CellData } from "../CellItem/CellItem";
 
-export const parseCellId = (cellId: string) => {
-  const regex = RegExp(/row-(\w+)-(\d{4}-\d{2}-\d{2})/);
-  const [, rowId, dateString] = regex.exec(cellId) ?? [];
-  const date = DateTime.fromISO(dateString);
-  return { rowId, date };
-};
-
 export const moveItem = (
-  items: Record<string, Array<DateTime>>,
+  data: AppData,
   sourceCell: CellData,
   targetCell: CellData
 ) => {
-  let newItems = addItemToCell(items, targetCell);
-  newItems = removeItemFromCell(newItems, sourceCell);
-  return newItems;
+  let newData = addItemToCell(data, targetCell);
+  newData = removeItemFromCell(newData, sourceCell);
+  return newData;
 };
 
-export const addItemToCell = (
-  items: Record<string, Array<DateTime>>,
-  cell: CellData
-) => {
-  const { rowId, date } = cell;
-  const newItems = { ...items };
-  newItems[rowId] = [...newItems[rowId], date];
-  return newItems;
+export const addItemToCell = (data: AppData, { rowId, date }: CellData) => {
+  const newData: AppData = data.map((row) => {
+    if (row.id === rowId) {
+      const id = String(Math.round(Math.random() * 10000));
+      return {
+        ...row,
+        items: [...row.items, { id, date }],
+      };
+    }
+    return row;
+  });
+  return newData;
 };
 
 export const removeItemFromCell = (
-  items: Record<string, Array<DateTime>>,
-  cell: CellData
+  data: AppData,
+  { rowId, date }: CellData
 ) => {
-  const { rowId, date } = cell;
-  const newItems = { ...items };
-  newItems[rowId] = newItems[rowId]?.filter(
-    (item) => !item.hasSame(date, "day")
-  );
-  return newItems;
+  const newData: AppData = data.map((row) => {
+    if (row.id === rowId) {
+      row.items = row.items.filter((item) => !item.date.hasSame(date, "day"));
+    }
+    return row;
+  });
+  return newData;
 };

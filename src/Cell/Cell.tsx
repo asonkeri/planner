@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useContext } from "react";
-import { ItemsContext } from "../App";
+import { DataContext, RowData } from "../App";
 import CellItem, { CellData } from "../CellItem/CellItem";
 import { useDropCellItem } from "../DragAndDrop/hooks";
 import { addItemToCell } from "../data";
@@ -28,16 +28,16 @@ const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
 
 type Props = CellData;
 export const Cell = (cell: Props) => {
-  const { items, setItems } = useContext(ItemsContext);
+  const { data, setData } = useContext(DataContext);
   const { isOver, drop } = useDropCellItem(cell);
 
   const handleClick = () => {
-    const newItems = addItemToCell(items, cell);
-    setItems(newItems);
+    const newData = addItemToCell(data, cell);
+    setData(newData);
   };
 
-  const rowItems = items[cell.rowId] ?? [];
-  const active = rowItems.some((item) => item.hasSame(cell.date, "day"));
+  const rowItems = data.find((item) => item.id === cell.rowId) ?? {} as RowData;
+  const active = rowItems.items.some((item) => item.date.hasSame(cell.date, "day"));
 
   return (
     <CellStyle ref={drop} isOver={isOver} onClick={handleClick}>

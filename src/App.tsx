@@ -9,32 +9,43 @@ import RowContainer from "./RowContainer/RowContainer";
 
 export type Items = Record<string, Array<DateTime>>;
 
-type ItemsContextType = { items: Items; setItems: (items: Items) => void };
+type DataContextType = { data: AppData; setData: (data: AppData) => void };
 const initialContext = {
-  items: {},
-  setItems: () => {
-    throw new Error("setItems() not implemented");
+  data: [],
+  setData: () => {
+    throw new Error("setData() not implemented");
   },
 };
-export const ItemsContext = createContext<ItemsContextType>(initialContext);
+export const DataContext = createContext<DataContextType>(initialContext);
 
-type Item = {
+export type Item = {
   id: string;
   date: DateTime;
 };
 
-type RowData = {
+export type RowData = {
   id: string;
   items: Array<Item>;
 };
 
-type AppData = Array<RowData>;
+export type AppData = Array<RowData>;
 
-const initialItems: Items = {
-  foo: [DateTime.now().plus({ day: 2 }).startOf("day")],
-  bar: [],
-  baz: [],
-};
+const initialData: AppData = [
+  {
+    id: "foo",
+    items: [
+      { id: "foo1", date: DateTime.now().plus({ day: 2 }).startOf("day") },
+    ],
+  },
+  {
+    id: "bar",
+    items: [],
+  },
+  {
+    id: "baz",
+    items: [],
+  },
+];
 
 function App() {
   const [startDate, setStartDate] = useState(DateTime.now().startOf("day"));
@@ -42,19 +53,19 @@ function App() {
     DateTime.now().plus({ day: 14 }).startOf("day")
   );
   const interval = Interval.fromDateTimes(startDate, endDate);
-  const [items, setItems] = useState<Items>(initialItems);
+  const [data, setData] = useState<AppData>(initialData);
 
   return (
-    <ItemsContext.Provider value={{ items, setItems }}>
+    <DataContext.Provider value={{ data, setData }}>
       <DndProvider backend={HTML5Backend}>
         <HeaderRow interval={interval} />
         <RowContainer>
-          {Object.entries(items).map(([rowId, rowItems]) => (
-            <Row key={rowId} interval={interval} id={rowId} />
+          {data.map(({ id }) => (
+            <Row key={id} interval={interval} id={id} />
           ))}
         </RowContainer>
       </DndProvider>
-    </ItemsContext.Provider>
+    </DataContext.Provider>
   );
 }
 

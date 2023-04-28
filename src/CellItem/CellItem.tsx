@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { DateTime } from "luxon";
 import { useContext } from "react";
-import { ItemsContext } from "../App";
+import { DataContext } from "../App";
 import { moveItem } from "../data";
 import { useDragCellItem } from "../DragAndDrop/hooks";
 
@@ -16,11 +16,11 @@ export type CellData = { rowId: string; date: DateTime };
 type Props = CellData;
 const CellItem = (cell: Props) => {
   const handleDrop = (dropResult: CellData) => {
-    const newItems = moveItem(items, cell, dropResult);
-    setItems(newItems);
+    const newItems = moveItem(data, cell, dropResult);
+    setData(newItems);
   };
 
-  const { items, setItems } = useContext(ItemsContext);
+  const { data, setData } = useContext(DataContext);
   const { dragRef } = useDragCellItem(cell, handleDrop);
 
   return <CellItemStyle ref={dragRef} />;
