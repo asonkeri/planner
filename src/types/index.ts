@@ -8,7 +8,8 @@ export type CellCoordinates = {
 export type Item = {
   id: string;
   rowId: string;
-  date: DateTime;
+  startDate: DateTime;
+  endDate: DateTime;
 };
 
 export type RowData = {

@@ -46,7 +46,7 @@ export const Cell = (cell: Props) => {
 
   const rowData = data.find((item) => item.id === cell.rowId);
   const cellItems = rowData
-    ? rowData.items.filter((item) => item.date.hasSame(cell.date, "day"))
+    ? rowData.items.filter((item) => item.startDate.hasSame(cell.date, "day"))
     : [];
 
   return (

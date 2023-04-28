@@ -25,14 +25,14 @@ export const useDropCellItem = (cell: CellCoordinates) => {
 
 export const useDragCellItem = (
   item: Item,
-  handleDrop: (dropResult: Item) => void
+  handleDrop: (dropResult: CellCoordinates) => void
 ) => {
   const [, dragRef] = useDrag(
     () => ({
       type: "CELLITEM",
       item: item,
       end: (_item, monitor: CellItemDragSourceMonitor) => {
-        const dropResult = monitor.getDropResult<Item>();
+        const dropResult = monitor.getDropResult<CellCoordinates>();
         if (dropResult) {
           handleDrop(dropResult);
         }
