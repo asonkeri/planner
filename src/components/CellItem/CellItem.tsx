@@ -6,10 +6,11 @@ import { useDragCellItem } from "../../hooks/dragAndDrop";
 import { Item } from "../../types";
 
 const CellItemStyle = styled.div`
-  width: 10px;
-  height: 10px;
+  width: 100%;
   margin: 2px;
   background-color: red;
+  border-radius: 0.25rem;
+  cursor: pointer;
 `;
 
 type Props = Item;
@@ -22,7 +23,7 @@ const CellItem = (item: Props) => {
   const { data, setData } = useContext(DataContext);
   const { dragRef } = useDragCellItem(item, handleDrop);
 
-  return <CellItemStyle ref={dragRef} />;
+  return <CellItemStyle ref={dragRef} >{item.id}</CellItemStyle>;
 };
 
 export default CellItem;

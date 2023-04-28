@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useContext } from "react";
+import { MouseEventHandler, useContext } from "react";
 import { DataContext } from "../../App";
 import { addItemToCell, createItem } from "../../data";
 import { useDropCellItem } from "../../hooks/dragAndDrop";
@@ -32,10 +32,13 @@ export const Cell = (cell: Props) => {
   const { data, setData } = useContext(DataContext);
   const { isOver, drop } = useDropCellItem(cell);
 
-  const handleClick = () => {
-    const item = createItem(cell.rowId, cell.date);
-    const newData = addItemToCell(data, item, cell);
-    setData(newData);
+  const handleClick: MouseEventHandler = (event) => {
+    // Only react to clicks on the cell itself, not on the items inside
+    if (event.target === event.currentTarget) {
+      const item = createItem(cell.rowId, cell.date);
+      const newData = addItemToCell(data, item, cell);
+      setData(newData);
+    }
   };
 
   const rowData = data.find((item) => item.id === cell.rowId);
