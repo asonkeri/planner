@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
 import { AppData, CellCoordinates, Item } from "../types";
 
-export const createItem = (rowId: string, date: DateTime): Item => {
+export const createItem = (rowId: string, date: DateTime, days = 1): Item => {
   const id = String(Math.round(Math.random() * 1000000));
-  return { id, rowId, startDate: date, endDate: date };
+  return { id, rowId, startDate: date, endDate: date.plus({ days: days - 1 }) };
 };
 
 export const moveItem = (

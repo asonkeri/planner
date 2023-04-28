@@ -5,6 +5,7 @@ import { addItemToCell, createItem } from "../../data";
 import { useDropCellItem } from "../../hooks/dragAndDrop";
 import { CellCoordinates } from "../../types";
 import CellItem from "../CellItem/CellItem";
+import { LaneItem } from "../../data/itemLaneCalculator";
 
 export const CommonCellStyle = styled.div`
   width: 100px;
@@ -19,35 +20,33 @@ type CellStyleProps = { isOver?: boolean };
 const borderHilightColor = "lightblue";
 const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
   padding-bottom: 1rem;
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  align-content: flex-start;
+  align-items: flex-start;
   z-index: ${({ isOver }) => (isOver ? 1 : "auto")};
   box-shadow: ${({ isOver }) =>
     isOver &&
     `4px 0 0 0 ${borderHilightColor}, 0 4px 0 0 ${borderHilightColor}, 4px 4px 0 0 ${borderHilightColor},4px 0 0 0 ${borderHilightColor} inset, 0 4px 0 0 ${borderHilightColor} inset;`};
 `;
 
-type Props = CellCoordinates;
-export const Cell = (cell: Props) => {
+type Props = CellCoordinates & { items: LaneItem[] };
+export const Cell = ({ rowId, date, items }: Props) => {
   const { data, setData } = useContext(DataContext);
-  const { isOver, drop } = useDropCellItem(cell);
+  const { isOver, drop } = useDropCellItem({ rowId, date });
 
   const handleClick: MouseEventHandler = (event) => {
     // Only react to clicks on the cell itself, not on the items inside
     if (event.target === event.currentTarget) {
-      const item = createItem(cell.rowId, cell.date);
-      const newData = addItemToCell(data, item, cell);
+      const item = createItem(rowId, date, 2);
+      const newData = addItemToCell(data, item, { rowId, date });
       setData(newData);
     }
   };
 
-  const rowData = data.find((item) => item.id === cell.rowId);
-  const cellItems = rowData
-    ? rowData.items.filter((item) => item.startDate.hasSame(cell.date, "day"))
-    : [];
+  const cellItems = items.filter((item) => item.startDate.hasSame(date, "day"));
 
   return (
     <CellStyle ref={drop} isOver={isOver} onClick={handleClick}>

@@ -19,7 +19,14 @@ const initialContext = {
 export const DataContext = createContext<DataContextType>(initialContext);
 
 const initialData: AppData = [
-  { id: "foo", items: [createItem("foo", DateTime.now().startOf("day"))] },
+  {
+    id: "foo",
+    items: [
+      createItem("foo", DateTime.now().startOf("day"), 2),
+      createItem("foo", DateTime.now().startOf("day").plus({ day: 1 }), 2),
+      // createItem("foo", DateTime.now().startOf("day").plus({ day: 1 }),2),
+    ],
+  },
   { id: "bar", items: [] },
   { id: "baz", items: [] },
 ];
@@ -37,8 +44,8 @@ function App() {
       <DndProvider backend={HTML5Backend}>
         <HeaderRow interval={interval} />
         <RowContainer>
-          {data.map(({ id }) => (
-            <Row key={id} interval={interval} id={id} />
+          {data.map(({ id, items }) => (
+            <Row key={id} interval={interval} id={id} items={items} />
           ))}
         </RowContainer>
       </DndProvider>
