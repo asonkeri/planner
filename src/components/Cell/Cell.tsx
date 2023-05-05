@@ -11,8 +11,12 @@ export const CommonCellStyle = styled.div`
   min-height: 60px;
   padding: 0.25rem;
   text-align: center;
-  box-shadow: 2px 0 0 0 #888, 0 2px 0 0 #888, 2px 2px 0 0 #888,
-    2px 0 0 0 #888 inset, 0 2px 0 0 #888 inset;
+  border: 0 solid #888;
+  border-right-width: 1px;
+  margin-right: -1px;
+  :last-of-type {
+    border-right-width: 0;
+  }
 `;
 
 type CellStyleProps = { isOver?: boolean };

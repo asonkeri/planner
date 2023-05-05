@@ -8,6 +8,8 @@ const RowStyle = styled.div(
   {
     display: "flex",
     transition: "height 0.2s ease-in-out",
+    borderTop: "1px solid #888",
+    marginTop: "-1px",
   },
   // Row height is dynamic based on the number of lanes
   ({ lanes }: { lanes: number }) => ({
@@ -18,8 +20,8 @@ const RowStyle = styled.div(
 const RowHeader = styled.div`
   width: 150px;
   padding-left: 10px;
-  box-shadow: 2px 0 0 0 #888, 0 2px 0 0 #888, 2px 2px 0 0 #888,
-    2px 0 0 0 #888 inset, 0 2px 0 0 #888 inset;
+  border-right: 1px solid #888;
+  margin-right: -1px;
 `;
 
 const LaneStyle = styled.div`
