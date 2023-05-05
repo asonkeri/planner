@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { useContext } from "react";
-import { DataContext } from "../../App";
 import { moveItem } from "../../data";
 import { useDragCellItem } from "../../hooks/dragAndDrop";
 import { CellCoordinates, Item } from "../../types";
+import { DataContext } from "../../context";
 
 type CellItemStyleProps = { days: number };
 const CellItemStyle = styled.div(

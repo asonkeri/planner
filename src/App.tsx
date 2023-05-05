@@ -1,22 +1,14 @@
 import { DateTime, Interval } from "luxon";
-import { createContext, useState } from "react";
+import { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "./App.css";
 import HeaderRow from "./components/HeaderRow/HeaderRow";
 import Row from "./components/Row/Row";
 import RowContainer from "./components/RowContainer/RowContainer";
+import { DataContext } from "./context";
 import { createItem } from "./data";
 import { AppData } from "./types";
-
-type DataContextType = { data: AppData; setData: (data: AppData) => void };
-const initialContext = {
-  data: [],
-  setData: () => {
-    throw new Error("setData() not implemented");
-  },
-};
-export const DataContext = createContext<DataContextType>(initialContext);
 
 const initialData: AppData = [
   {
@@ -24,7 +16,6 @@ const initialData: AppData = [
     items: [
       createItem("foo", DateTime.now().startOf("day"), 2),
       createItem("foo", DateTime.now().startOf("day").plus({ day: 1 }), 2),
-      // createItem("foo", DateTime.now().startOf("day").plus({ day: 1 }),2),
     ],
   },
   { id: "bar", items: [] },

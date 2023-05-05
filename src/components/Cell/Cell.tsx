@@ -1,11 +1,10 @@
 import styled from "@emotion/styled";
 import { MouseEventHandler, useContext } from "react";
-import { DataContext } from "../../App";
 import { addItemToCell, createItem } from "../../data";
 import { useDropCellItem } from "../../hooks/dragAndDrop";
 import { CellCoordinates, Item } from "../../types";
 import CellItem from "../CellItem/CellItem";
-import { DragContext } from "../../context/DragContext";
+import { DataContext, DragContext } from "../../context";
 
 export const CommonCellStyle = styled.div`
   width: 100px;
