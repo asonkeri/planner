@@ -5,6 +5,7 @@ import { addItemToCell, createItem } from "../../data";
 import { useDropCellItem } from "../../hooks/dragAndDrop";
 import { CellCoordinates, Item } from "../../types";
 import CellItem from "../CellItem/CellItem";
+import { DragContext } from "../../context/DragContext";
 
 export const CommonCellStyle = styled.div`
   width: 100px;
@@ -19,7 +20,7 @@ export const CommonCellStyle = styled.div`
   }
 `;
 
-type CellStyleProps = { isOver?: boolean };
+type CellStyleProps = { isOver?: boolean; isDragging?: boolean };
 const borderHilightColor = "lightblue";
 const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
   padding-bottom: 1rem;
@@ -29,15 +30,16 @@ const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
   align-items: center;
   justify-content: center;
   align-items: flex-start;
-  z-index: ${({ isOver }) => (isOver ? 1 : "auto")};
   box-shadow: ${({ isOver }) =>
     isOver &&
     `4px 0 0 0 ${borderHilightColor}, 0 4px 0 0 ${borderHilightColor}, 4px 4px 0 0 ${borderHilightColor},4px 0 0 0 ${borderHilightColor} inset, 0 4px 0 0 ${borderHilightColor} inset;`};
+  z-index: ${({ isDragging }) => (isDragging ? 1 : "auto")};
 `;
 
 type Props = CellCoordinates & { items: Item[] };
 export const Cell = ({ rowId, date, items }: Props) => {
   const { data, setData } = useContext(DataContext);
+  const { isDragging } = useContext(DragContext);
   const { isOver, drop } = useDropCellItem({ rowId, date });
 
   const handleClick: MouseEventHandler = (event) => {
@@ -52,7 +54,12 @@ export const Cell = ({ rowId, date, items }: Props) => {
   const cellItems = items.filter((item) => item.startDate.hasSame(date, "day"));
 
   return (
-    <CellStyle ref={drop} isOver={isOver} onClick={handleClick}>
+    <CellStyle
+      ref={drop}
+      isDragging={isDragging}
+      isOver={isOver}
+      onClick={handleClick}
+    >
       {cellItems.map((item) => (
         <CellItem key={item.id} {...item} />
       ))}

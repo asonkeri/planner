@@ -5,6 +5,8 @@ import {
   useDrop,
 } from "react-dnd";
 import { CellCoordinates, Item } from "../types";
+import { DragContext } from "../context/DragContext";
+import { useContext, useEffect } from "react";
 
 type CellItemDragSourceMonitor = DragSourceMonitor<Item, Item>;
 type CellItemDropTargetMonitor = DropTargetMonitor<Item, CellCoordinates>;
@@ -27,10 +29,13 @@ export const useDragCellItem = (
   item: Item,
   handleDrop: (dropResult: CellCoordinates) => void
 ) => {
-  const [, dragRef] = useDrag(
+  const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: "CELLITEM",
       item: item,
+      collect: (monitor: CellItemDragSourceMonitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
       end: (_item, monitor: CellItemDragSourceMonitor) => {
         const dropResult = monitor.getDropResult<CellCoordinates>();
         if (dropResult) {
@@ -40,5 +45,12 @@ export const useDragCellItem = (
     }),
     [handleDrop]
   );
+
+  // Set isDragging in DragContext when isDragging changes
+  const { setIsDragging } = useContext(DragContext);
+  useEffect(() => {
+    setIsDragging(isDragging);
+  }, [isDragging, setIsDragging]);
+
   return { dragRef };
 };

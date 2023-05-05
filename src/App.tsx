@@ -32,10 +32,8 @@ const initialData: AppData = [
 ];
 
 function App() {
-  const [startDate, setStartDate] = useState(DateTime.now().startOf("day"));
-  const [endDate, setEndDate] = useState(
-    DateTime.now().plus({ day: 14 }).startOf("day")
-  );
+  const [startDate] = useState(DateTime.now().startOf("day"));
+  const [endDate] = useState(DateTime.now().plus({ day: 14 }).startOf("day"));
   const interval = Interval.fromDateTimes(startDate, endDate);
   const [data, setData] = useState<AppData>(initialData);
 
