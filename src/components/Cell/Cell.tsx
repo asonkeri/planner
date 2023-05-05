@@ -3,9 +3,8 @@ import { MouseEventHandler, useContext } from "react";
 import { DataContext } from "../../App";
 import { addItemToCell, createItem } from "../../data";
 import { useDropCellItem } from "../../hooks/dragAndDrop";
-import { CellCoordinates } from "../../types";
+import { CellCoordinates, Item } from "../../types";
 import CellItem from "../CellItem/CellItem";
-import { LaneItem } from "../../data/itemLaneCalculator";
 
 export const CommonCellStyle = styled.div`
   width: 100px;
@@ -32,7 +31,7 @@ const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
     `4px 0 0 0 ${borderHilightColor}, 0 4px 0 0 ${borderHilightColor}, 4px 4px 0 0 ${borderHilightColor},4px 0 0 0 ${borderHilightColor} inset, 0 4px 0 0 ${borderHilightColor} inset;`};
 `;
 
-type Props = CellCoordinates & { items: LaneItem[] };
+type Props = CellCoordinates & { items: Item[] };
 export const Cell = ({ rowId, date, items }: Props) => {
   const { data, setData } = useContext(DataContext);
   const { isOver, drop } = useDropCellItem({ rowId, date });

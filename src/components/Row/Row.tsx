@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Interval } from "luxon";
+import { DateTime, Interval } from "luxon";
 import { Item } from "../../types";
 import { Cell } from "../Cell/Cell";
 import { getLanes } from "../../data/itemLaneCalculator";
@@ -11,7 +11,7 @@ const RowStyle = styled.div(
   },
   // Row height is dynamic based on the number of lanes
   ({ lanes }: { lanes: number }) => ({
-    height: `${lanes * 40 + 30}px`,
+    height: `${lanes * 60}px`,
   })
 );
 
@@ -22,6 +22,10 @@ const RowHeader = styled.div`
     2px 0 0 0 #888 inset, 0 2px 0 0 #888 inset;
 `;
 
+const LaneStyle = styled.div`
+  display: flex;
+`;
+
 type Props = {
   children?: React.ReactNode;
   interval: Interval;
@@ -30,25 +34,21 @@ type Props = {
 };
 
 const Row = ({ interval, id, items }: Props) => {
-  const days = interval.splitBy({ day: 1 });
-  const { lanes, itemsWithLanes } = getLanes(items);
+  const days = interval.splitBy({ day: 1 }).map((day) => day.start as DateTime);
+  const { lanes } = getLanes(items);
 
   return (
-    <RowStyle lanes={lanes}>
+    <RowStyle lanes={lanes.length}>
       <RowHeader>Row ({id})</RowHeader>
-      {days.map((day) => {
-        const { start } = day;
-        return (
-          start && (
-            <Cell
-              key={start.toISODate()}
-              rowId={id}
-              date={start}
-              items={itemsWithLanes}
-            />
-          )
-        );
-      })}
+      <div>
+        {lanes.map((lane, index) => (
+          <LaneStyle key={index}>
+            {days.map((day) => (
+              <Cell key={day.toISODate()} rowId={id} date={day} items={lane} />
+            ))}
+          </LaneStyle>
+        ))}
+      </div>
     </RowStyle>
   );
 };

@@ -1,7 +1,6 @@
 import { Item } from "../types";
 
-export type Lane = Array<Item>;
-export type LaneItem = Item & { lane: number };
+export type Lane = Item[];
 
 const isItemOverlapping = (item: Item, otherItem: Item) => {
   return (
@@ -19,22 +18,15 @@ const getFreeLane = (item: Item, lanes: Lane[]) => {
 };
 
 export const getLanes = (items: Item[]) => {
-  const lanes: Lane[] = [];
-  const itemsWithLanes: LaneItem[] = items.map((item) => ({
-    ...item,
-    lane: 0,
-  }));
+  const lanes: Lane[] = [[]];
 
-  itemsWithLanes.forEach((item) => {
+  items.forEach((item) => {
     const indexOfFreeLane = getFreeLane(item, lanes);
     if (indexOfFreeLane !== -1) {
       lanes[indexOfFreeLane].push(item);
-      item.lane = indexOfFreeLane;
     } else {
       lanes.push([item]);
-      item.lane = lanes.length - 1;
     }
   });
-  const laneCount = Math.max(lanes.length, 1);
-  return { lanes: laneCount, itemsWithLanes };
+  return { lanes };
 };

@@ -3,10 +3,9 @@ import { useContext } from "react";
 import { DataContext } from "../../App";
 import { moveItem } from "../../data";
 import { useDragCellItem } from "../../hooks/dragAndDrop";
-import { CellCoordinates } from "../../types";
-import { LaneItem } from "../../data/itemLaneCalculator";
+import { CellCoordinates, Item } from "../../types";
 
-type CellItemStyleProps = { days: number; lane: number };
+type CellItemStyleProps = { days: number };
 const CellItemStyle = styled.div(
   {
     height: "30px",
@@ -17,10 +16,6 @@ const CellItemStyle = styled.div(
     cursor: "pointer",
     zIndex: 1, // Item must be grabbable on the part that is spanning another cell
   },
-  // Styles for making the item appear in the correct lane
-  ({ lane }: CellItemStyleProps) => ({
-    top: `${lane * 40 + 5}px`,
-  }),
   // Styles for making the item span multiple days
   ({ days }: CellItemStyleProps) => ({
     position: "absolute",
@@ -29,8 +24,8 @@ const CellItemStyle = styled.div(
   })
 );
 
-type Props = LaneItem;
-const CellItem = ({ lane, ...item }: Props) => {
+type Props = Item;
+const CellItem = (item: Props) => {
   const handleDrop = (dropResult: CellCoordinates) => {
     const newItems = moveItem(data, item, dropResult);
     setData(newItems);
@@ -41,7 +36,7 @@ const CellItem = ({ lane, ...item }: Props) => {
   const days = item.endDate.diff(item.startDate, "days").days + 1;
 
   return (
-    <CellItemStyle days={days} ref={dragRef} lane={lane}>
+    <CellItemStyle days={days} ref={dragRef}>
       {item.id}({days})
     </CellItemStyle>
   );
