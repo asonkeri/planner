@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { MouseEventHandler, useContext } from "react";
 import { addItemToCell, createItem } from "../../data";
-import { useDropCellItem } from "../../hooks/dragAndDrop";
+import { useDropCellItem } from "../../hooks";
 import { CellCoordinates, Item } from "../../types";
 import CellItem from "../CellItem/CellItem";
 import { DataContext, DragContext } from "../../context";
