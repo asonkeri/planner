@@ -1,16 +1,12 @@
 import styled from "@emotion/styled";
-import { Interval } from "luxon";
+import { DateTime, Interval } from "luxon";
 import { CommonCellStyle } from "../Cell/Cell";
+import { RowHeader } from "../Row/Row";
 
 const RowStyle = styled.div`
   display: flex;
   border: 1px solid #888;
   margin: -1px;
-`;
-
-const RowHeader = styled.div`
-  width: 150px;
-  padding-left: 10px;
 `;
 
 type Props = {
@@ -24,7 +20,8 @@ const HeaderRow = ({ interval }: Props) => {
     <RowStyle>
       <RowHeader>HeaderRow</RowHeader>
       {days.map((day) => {
-        const isoDate = day.start?.toISODate() ?? "bla";
+        const start = day.start as DateTime;
+        const isoDate = start.toISODate();
         return <CommonCellStyle key={isoDate}>{isoDate}</CommonCellStyle>;
       })}
     </RowStyle>

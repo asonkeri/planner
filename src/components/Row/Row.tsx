@@ -17,7 +17,7 @@ const RowStyle = styled.div(
   })
 );
 
-const RowHeader = styled.div`
+export const RowHeader = styled.div`
   width: 150px;
   padding-left: 10px;
   border-right: 1px solid #888;
