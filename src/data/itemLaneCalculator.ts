@@ -28,5 +28,5 @@ export const getLanes = (items: Item[]) => {
       lanes.push([item]);
     }
   });
-  return { lanes };
+  return lanes;
 };

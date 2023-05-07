@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { DateTime, Interval } from "luxon";
+import { getLanes } from "../../data/itemLaneCalculator";
 import { Item } from "../../types";
 import { Cell } from "../Cell/Cell";
-import { getLanes } from "../../data/itemLaneCalculator";
 
 const RowStyle = styled.div(
   {
@@ -37,7 +37,7 @@ type Props = {
 
 const Row = ({ interval, id, items }: Props) => {
   const days = interval.splitBy({ day: 1 }).map((day) => day.start as DateTime);
-  const { lanes } = getLanes(items);
+  const lanes = getLanes(items);
 
   return (
     <RowStyle lanes={lanes.length}>
@@ -46,7 +46,13 @@ const Row = ({ interval, id, items }: Props) => {
         {lanes.map((lane, index) => (
           <LaneStyle key={index}>
             {days.map((day) => (
-              <Cell key={day.toISODate()} rowId={id} date={day} items={lane} />
+              <Cell
+                key={day.toISODate()}
+                rowId={id}
+                date={day}
+                items={lane}
+                lane={index}
+              />
             ))}
           </LaneStyle>
         ))}

@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { useContext } from "react";
-import { moveItem } from "../../data";
 import { useDragCellItem } from "../../hooks";
 import { CellCoordinates, Item } from "../../types";
 import { DataContext } from "../../context";
+import { RowsViewModel } from "../../data/RowsViewModel";
 
 type CellItemStyleProps = { days: number };
 const CellItemStyle = styled.div(
@@ -24,14 +24,15 @@ const CellItemStyle = styled.div(
   })
 );
 
-type Props = Item;
-const CellItem = (item: Props) => {
-  const handleDrop = (dropResult: CellCoordinates) => {
-    const newItems = moveItem(data, item, dropResult);
-    setData(newItems);
+type Props = { item: Item; cell: CellCoordinates };
+const CellItem = ({ item, cell }: Props) => {
+  const handleDrop = (targetCell: CellCoordinates) => {
+    rowsViewModel.moveItem(item, cell, targetCell);
   };
 
-  const { data, setData } = useContext(DataContext);
+  const dataContext = useContext(DataContext);
+  const rowsViewModel = new RowsViewModel(dataContext);
+
   const { dragRef } = useDragCellItem(item, handleDrop);
   const days = item.endDate.diff(item.startDate, "days").days + 1;
 

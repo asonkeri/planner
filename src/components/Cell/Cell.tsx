@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 import { MouseEventHandler, useContext } from "react";
-import { addItemToCell, createItem } from "../../data";
+import { DataContext, DragContext } from "../../context";
+import { createItem } from "../../data";
+import { RowsViewModel } from "../../data/RowsViewModel";
 import { useDropCellItem } from "../../hooks";
 import { CellCoordinates, Item } from "../../types";
 import CellItem from "../CellItem/CellItem";
-import { DataContext, DragContext } from "../../context";
 
 export const CommonCellStyle = styled.div`
   width: 100px;
@@ -36,17 +37,19 @@ const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
 `;
 
 type Props = CellCoordinates & { items: Item[] };
-export const Cell = ({ rowId, date, items }: Props) => {
-  const { data, setData } = useContext(DataContext);
+export const Cell = ({ rowId, date, items, lane }: Props) => {
+  const cell = { rowId, date, lane };
+  const dataContext = useContext(DataContext);
   const { isDragging } = useContext(DragContext);
-  const { isOver, drop } = useDropCellItem({ rowId, date });
+  const { isOver, drop } = useDropCellItem(cell);
+
+  const rowsViewModel = new RowsViewModel(dataContext);
 
   const handleClick: MouseEventHandler = (event) => {
     // Only react to clicks on the cell itself, not on the items inside
     if (event.target === event.currentTarget) {
       const item = createItem(rowId, date, 2);
-      const newData = addItemToCell(data, item, { rowId, date });
-      setData(newData);
+      rowsViewModel.addItem(item, cell);
     }
   };
 
@@ -60,7 +63,7 @@ export const Cell = ({ rowId, date, items }: Props) => {
       onClick={handleClick}
     >
       {cellItems.map((item) => (
-        <CellItem key={item.id} {...item} />
+        <CellItem key={item.id} item={item} cell={cell} />
       ))}
     </CellStyle>
   );

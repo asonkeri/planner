@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 
 export type CellCoordinates = {
   rowId: string;
+  lane: number;
   date: DateTime;
 };
 

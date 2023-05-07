@@ -3,10 +3,13 @@ import { AppData } from "../types";
 
 /**
  * DataContext
- * Keeps track of the data in the app.
+ * For injecting App data and setter function into components.
  */
 
-type DataContextType = { data: AppData; setData: (data: AppData) => void };
+export type DataContextType = {
+  data: AppData;
+  setData: (data: AppData) => void;
+};
 const initialContext = {
   data: [],
   setData: () => {
