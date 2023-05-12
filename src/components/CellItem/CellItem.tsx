@@ -1,12 +1,10 @@
 import styled from "@emotion/styled";
-import { useContext } from "react";
+import { useDragDropManager } from "react-dnd";
 import { useDragCellItem } from "../../hooks";
-import { CellCoordinates, Item } from "../../types";
-import { DataContext } from "../../context";
-import { RowsViewModel } from "../../data/RowsViewModel";
+import { Item } from "../../types";
 
-type CellItemStyleProps = { days: number };
-const CellItemStyle = styled.div(
+type CellItemStyleProps = { days: number; isDragging: boolean };
+export const CellItemStyle = styled.div(
   {
     height: "30px",
     margin: "0.25rem",
@@ -14,31 +12,32 @@ const CellItemStyle = styled.div(
     border: "1px solid black",
     borderRadius: "0.25rem",
     cursor: "pointer",
-    zIndex: 1, // Item must be grabbable on the part that is spanning another cell
   },
+  ({ isDragging }: CellItemStyleProps) => ({
+    zIndex: isDragging ? "unset" : 1,
+  }),
   // Styles for making the item span multiple days
-  ({ days }: CellItemStyleProps) => ({
-    position: "absolute",
-    left: 0,
-    right: `${days * -100 + 100}%}`,
-  })
+  ({ days }: CellItemStyleProps) => {
+    const right = `${days * -100 + 100}%`;
+    return {
+      position: "absolute",
+      left: 0,
+      right: right,
+    };
+  }
 );
 
-type Props = { item: Item; cell: CellCoordinates };
-const CellItem = ({ item, cell }: Props) => {
-  const handleDrop = (targetCell: CellCoordinates) => {
-    rowsViewModel.moveItem(item, cell, targetCell);
-  };
+type Props = { item: Item };
+const CellItem = ({ item }: Props) => {
+  const { dragRef } = useDragCellItem(item);
 
-  const dataContext = useContext(DataContext);
-  const rowsViewModel = new RowsViewModel(dataContext);
+  const isDragging = useDragDropManager().getMonitor().isDragging();
 
-  const { dragRef } = useDragCellItem(item, handleDrop);
   const days = item.endDate.diff(item.startDate, "days").days + 1;
 
   return (
-    <CellItemStyle days={days} ref={dragRef}>
-      {item.id}({days})
+    <CellItemStyle days={days} ref={dragRef} isDragging={isDragging}>
+      {item.id}({days})(Z: {isDragging ? "unset" : 1})
     </CellItemStyle>
   );
 };

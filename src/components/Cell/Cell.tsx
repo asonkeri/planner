@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 import { MouseEventHandler, useContext } from "react";
-import { DataContext, DragContext } from "../../context";
+import { DataContext } from "../../context";
 import { createItem } from "../../data";
 import { RowsViewModel } from "../../data/RowsViewModel";
 import { useDropCellItem } from "../../hooks";
 import { CellCoordinates, Item } from "../../types";
+import { PlaceholderItem } from "../CellItem/PlaceholderItem";
 import CellItem from "../CellItem/CellItem";
 
 export const CommonCellStyle = styled.div`
@@ -20,7 +21,7 @@ export const CommonCellStyle = styled.div`
   }
 `;
 
-type CellStyleProps = { isOver?: boolean; isDragging?: boolean };
+type CellStyleProps = { isOver?: boolean };
 const borderHilightColor = "lightblue";
 const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
   padding-bottom: 1rem;
@@ -33,15 +34,23 @@ const CellStyle = styled(CommonCellStyle)<CellStyleProps>`
   box-shadow: ${({ isOver }) =>
     isOver &&
     `4px 0 0 0 ${borderHilightColor}, 0 4px 0 0 ${borderHilightColor}, 4px 4px 0 0 ${borderHilightColor},4px 0 0 0 ${borderHilightColor} inset, 0 4px 0 0 ${borderHilightColor} inset;`};
-  z-index: ${({ isDragging }) => (isDragging ? 1 : "auto")};
 `;
 
 type Props = CellCoordinates & { items: Item[] };
 export const Cell = ({ rowId, date, items, lane }: Props) => {
-  const cell = { rowId, date, lane };
+  const cell: CellCoordinates = { rowId, date, lane };
   const dataContext = useContext(DataContext);
-  const { isDragging } = useContext(DragContext);
-  const { isOver, drop } = useDropCellItem(cell);
+
+  const handleHover = (item: Item) => {
+    // TODO: Add placeholder cellitem to the current cell
+    console.log("hover", item.id);
+  };
+
+  const handleDrop = (item: Item) => {
+    rowsViewModel.moveItem(item, cell);
+  };
+
+  const { isOver, drop } = useDropCellItem(cell, handleHover, handleDrop);
 
   const rowsViewModel = new RowsViewModel(dataContext);
 
@@ -56,14 +65,12 @@ export const Cell = ({ rowId, date, items, lane }: Props) => {
   const cellItems = items.filter((item) => item.startDate.hasSame(date, "day"));
 
   return (
-    <CellStyle
-      ref={drop}
-      isDragging={isDragging}
-      isOver={isOver}
-      onClick={handleClick}
-    >
+    <CellStyle ref={drop} isOver={isOver} onClick={handleClick}>
       {cellItems.map((item) => (
-        <CellItem key={item.id} item={item} cell={cell} />
+        <>
+          <CellItem key={item.id} item={item} />
+          <PlaceholderItem key={item.id} item={item} />
+        </>
       ))}
     </CellStyle>
   );

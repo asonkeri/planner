@@ -27,13 +27,7 @@ export class RowsViewModel {
     this.context.setData(newData);
   }
 
-  moveItem(
-    item: Item,
-    sourceCell: CellCoordinates,
-    targetCell: CellCoordinates
-  ) {
-    if (this._isSameCell(sourceCell, targetCell)) return;
-
+  moveItem(item: Item, targetCell: CellCoordinates) {
     const newItem = {
       ...item,
       rowId: targetCell.rowId,
@@ -43,14 +37,6 @@ export class RowsViewModel {
     let data = this._removeItem(item);
     data = this._addItem(newItem, targetCell);
     this.context.setData(data);
-  }
-
-  private _isSameCell(cell1: CellCoordinates, cell2: CellCoordinates) {
-    return (
-      cell1.rowId === cell2.rowId &&
-      cell1.lane === cell2.lane &&
-      cell1.date.equals(cell2.date)
-    );
   }
 
   private _addItem(item: Item, targetCell: CellCoordinates) {
