@@ -9,9 +9,11 @@ type CollectedProps = {
 
 /**
  * Hook for dropping a cell item on another cell.
- * Returns the target cell coordinates for use in `monitor.getDropResult()` in `endDrag` handler.
+ * Handles calling the logic for dropping the item on a drop target and hovering over a drop target.
  * Collects the `isOver` state for styling the currently hovered drop target.
  * @param cell Coordinates of the cell that an item is being dropped on
+ * @param handleHover Callback for hovering over a drop target
+ * @param handleDrop Callback for dropping an item on a drop target
  * @returns
  */
 export const useDropCellItem = (

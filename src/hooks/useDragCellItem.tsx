@@ -36,6 +36,7 @@ const getHorizontalCellOffset = (
 /**
  * Hook for dragging a cell item to another cell.
  * Handles calling the logic for dropping the item outside of a drop target.
+ * Logic for dropping the item on a drop target is handled in `useDropCellItem`.
  * @param item Item that is dragged
  * @param handleCancel Callback for cancelling the drag operation
  * @param dragItemRef Ref to the element that is being dragged
