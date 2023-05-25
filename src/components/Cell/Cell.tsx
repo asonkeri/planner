@@ -10,7 +10,6 @@ import CellItem from "../CellItem/CellItem";
 export const CommonCellStyle = styled.div`
   width: 100px;
   min-height: 60px;
-  padding: 0.25rem;
   text-align: center;
   border: 0 solid #888;
   border-right-width: 1px;
@@ -40,18 +39,15 @@ export const Cell = ({ rowId, date, items, lane }: Props) => {
   const cell: CellCoordinates = { rowId, date, lane };
   const dataContext = useContext(DataContext);
 
-  const handleHover = (item: Item) => {
-    // TODO: Add placeholder cellitem to the current cell
-    setTimeout(() => {
-      if (isOver) {
-        rowsViewModel.moveItem(item, cell);
-      }
-    }, 10);
+  const handleHover = (item: Item, cellOffset: number) => {
+    const targetCell = { date: date.minus({ days: cellOffset }), rowId, lane };
+    rowsViewModel.moveItem(item, targetCell);
   };
 
-  const handleDrop = (item: Item) => {
-    rowsViewModel.moveItem(item, cell);
-    alert(`Dropped item ${item.id} on cell ${JSON.stringify(cell)}`);
+  const handleDrop = (item: Item, cellOffset: number) => {
+    const targetCell = { date: date.minus({ days: cellOffset }), rowId, lane };
+    rowsViewModel.moveItem(item, targetCell);
+    alert(`Dropped item ${item.id} on cell ${JSON.stringify(targetCell)}`);
   };
 
   const handleCancel = (item: Item) => {

@@ -1,7 +1,10 @@
-import { DropTargetMonitor, useDrop } from "react-dnd";
-import { Item, CellCoordinates } from "../types";
+import { useDrop } from "react-dnd";
+import { CellCoordinates, Item } from "../types";
+import { DragPayload } from "./useDragCellItem";
 
-type CellItemDropTargetMonitor = DropTargetMonitor<Item, void>;
+type CollectedProps = {
+  isOver: boolean;
+};
 
 /**
  * Hook for dropping a cell item on another cell.
@@ -12,19 +15,19 @@ type CellItemDropTargetMonitor = DropTargetMonitor<Item, void>;
  */
 export const useDropCellItem = (
   cell: CellCoordinates,
-  handleHover: (item: Item) => void,
-  handleDrop: (item: Item) => void
+  handleHover: (item: Item, cellOffset: number) => void,
+  handleDrop: (item: Item, cellOffset: number) => void
 ) => {
-  const [{ isOver }, drop] = useDrop(
+  const [{ isOver }, drop] = useDrop<DragPayload, void, CollectedProps>(
     () => ({
       accept: "CELLITEM",
-      drop: (item) => {
-        handleDrop(item);
+      drop: ({ item, cellOffset }) => {
+        handleDrop(item, cellOffset);
       },
-      hover(item) {
-        handleHover(item);
+      hover({ item, cellOffset }) {
+        handleHover(item, cellOffset);
       },
-      collect: (monitor: CellItemDropTargetMonitor) => ({
+      collect: (monitor) => ({
         isOver: !!monitor.isOver(),
       }),
     }),
