@@ -1,7 +1,11 @@
 import styled from "@emotion/styled";
-import { useDragDropManager } from "react-dnd";
+import { DragPreviewImage, useDragDropManager } from "react-dnd";
 import { useDragCellItem } from "../../hooks";
 import { Item } from "../../types";
+
+// Transparent 1x1 pixel image for the drag preview
+const emptyImage =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2NgAAIAAAUAAR4f7BQAAAAASUVORK5CYII=";
 
 type CellItemStyleProps = { days: number; isDragging: boolean };
 export const CellItemStyle = styled.div(
@@ -27,18 +31,20 @@ export const CellItemStyle = styled.div(
   }
 );
 
-type Props = { item: Item };
-const CellItem = ({ item }: Props) => {
-  const { dragRef } = useDragCellItem(item);
-
-  const isDragging = useDragDropManager().getMonitor().isDragging();
+type Props = { item: Item; handleCancel: (item: Item) => void };
+const CellItem = ({ item, handleCancel }: Props) => {
+  const { dragRef, preview } = useDragCellItem(item, handleCancel);
 
   const days = item.endDate.diff(item.startDate, "days").days + 1;
+  const isDragging = useDragDropManager().getMonitor().isDragging();
 
   return (
-    <CellItemStyle days={days} ref={dragRef} isDragging={isDragging}>
-      {item.id}({days})(Z: {isDragging ? "unset" : 1})
-    </CellItemStyle>
+    <>
+      <DragPreviewImage connect={preview} src={emptyImage} />
+      <CellItemStyle days={days} ref={dragRef} isDragging={isDragging}>
+        {item.id}({days})(Z: {isDragging ? "unset" : 1})
+      </CellItemStyle>
+    </>
   );
 };
 

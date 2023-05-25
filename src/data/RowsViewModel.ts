@@ -22,8 +22,8 @@ export class RowsViewModel {
     this.context.setData(newData);
   }
 
-  removeItem(item: Item) {
-    const newData = this._removeItem(item);
+  removeItem(itemId: string) {
+    const newData = this._removeItem(itemId);
     this.context.setData(newData);
   }
 
@@ -34,7 +34,7 @@ export class RowsViewModel {
       startDate: targetCell.date,
       endDate: targetCell.date.plus(item.endDate.diff(item.startDate, "days")),
     };
-    let data = this._removeItem(item);
+    let data = this._removeItem(item.id);
     data = this._addItem(newItem, targetCell);
     this.context.setData(data);
   }
@@ -61,11 +61,9 @@ export class RowsViewModel {
     return newData;
   }
 
-  private _removeItem(item: Item) {
+  private _removeItem(itemId: string) {
     return this.context.data.map((row) => {
-      if (row.id === item.rowId) {
-        row.items = row.items.filter((rowItem) => rowItem.id !== item.id);
-      }
+      row.items = row.items.filter((item) => item.id !== itemId);
       return row;
     });
   }

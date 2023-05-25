@@ -5,7 +5,6 @@ import { createItem } from "../../data";
 import { RowsViewModel } from "../../data/RowsViewModel";
 import { useDropCellItem } from "../../hooks";
 import { CellCoordinates, Item } from "../../types";
-import { PlaceholderItem } from "../CellItem/PlaceholderItem";
 import CellItem from "../CellItem/CellItem";
 
 export const CommonCellStyle = styled.div`
@@ -43,10 +42,19 @@ export const Cell = ({ rowId, date, items, lane }: Props) => {
 
   const handleHover = (item: Item) => {
     // TODO: Add placeholder cellitem to the current cell
-    console.log("hover", item.id);
+    setTimeout(() => {
+      if (isOver) {
+        rowsViewModel.moveItem(item, cell);
+      }
+    }, 10);
   };
 
   const handleDrop = (item: Item) => {
+    rowsViewModel.moveItem(item, cell);
+    alert(`Dropped item ${item.id} on cell ${JSON.stringify(cell)}`);
+  };
+
+  const handleCancel = (item: Item) => {
     rowsViewModel.moveItem(item, cell);
   };
 
@@ -67,10 +75,7 @@ export const Cell = ({ rowId, date, items, lane }: Props) => {
   return (
     <CellStyle ref={drop} isOver={isOver} onClick={handleClick}>
       {cellItems.map((item) => (
-        <>
-          <CellItem key={item.id} item={item} />
-          <PlaceholderItem key={item.id} item={item} />
-        </>
+        <CellItem key={item.id} item={item} handleCancel={handleCancel} />
       ))}
     </CellStyle>
   );
