@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { DragContext } from "../../context/DragContext";
 
 const RowStyle = styled.div`
   display: flex;
@@ -21,17 +20,14 @@ type Props = {
 const RowContainer = ({ children }: Props) => {
   const [open, setOpen] = useState(true);
   const toggleOpen = () => setOpen(!open);
-  const [isDragging, setIsDragging] = useState(false);
 
   return (
-    <DragContext.Provider value={{ isDragging, setIsDragging }}>
-      <RowStyle>
-        <RowContainerLabel onClick={toggleOpen}>
-          {(open ? "▲" : "▼") + " RowContainer"}
-        </RowContainerLabel>
-        {open ? children : null}
-      </RowStyle>
-    </DragContext.Provider>
+    <RowStyle>
+      <RowContainerLabel onClick={toggleOpen}>
+        {(open ? "▲" : "▼") + " RowContainer"}
+      </RowContainerLabel>
+      {open ? children : null}
+    </RowStyle>
   );
 };
 
